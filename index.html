@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIS Developer Portal | Tyler Technologies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #0d0e11;
+    --bg-secondary: #13151a;
+    --bg-tertiary: #1a1d24;
+    --bg-card: #1e2128;
+    --border: #2a2d36;
+    --border-active: #3d4251;
+    --accent: #00a8e8;
+    --accent-dim: rgba(0,168,232,0.12);
+    --accent-glow: rgba(0,168,232,0.25);
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --purple: #a78bfa;
+    --text-primary: #e8eaf0;
+    --text-secondary: #8b90a0;
+    --text-muted: #555b6e;
+    --sidebar-width: 280px;
+    --toc-width: 220px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── TOP NAV ── */
+  .topnav {
+    height: 56px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 0;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text-primary);
+    text-decoration: none;
+    margin-right: 32px;
+  }
+
+  .logo-mark {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    font-size: 11px;
+    color: #000;
+    letter-spacing: -0.5px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2px;
+    flex: 1;
+  }
+
+  .nav-link {
+    padding: 6px 14px;
+    border-radius: 6px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 400;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .nav-link:hover { color: var(--text-primary); background: var(--bg-tertiary); }
+  .nav-link.active { color: var(--text-primary); background: var(--bg-tertiary); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    width: 220px;
+    transition: border-color 0.15s;
+  }
+  .search-box:hover { border-color: var(--border-active); }
+  .search-box span { color: var(--text-muted); font-size: 13px; flex: 1; }
+  .search-kbd {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  .nav-badge {
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid rgba(0,168,232,0.3);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: flex;
+    padding-top: 56px;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-width);
+    position: fixed;
+    top: 56px;
+    bottom: 0;
+    left: 0;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 20px 12px;
+  }
+
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .sidebar-section { margin-bottom: 8px; }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border-radius: 6px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 13.5px;
+    transition: all 0.12s;
+    text-decoration: none;
+    width: 100%;
+    border: none;
+    background: none;
+    text-align: left;
+  }
+  .sidebar-item:hover { color: var(--text-primary); background: var(--bg-tertiary); }
+  .sidebar-item.active { color: var(--text-primary); background: var(--accent-dim); }
+  .sidebar-item.active .sidebar-dot { background: var(--accent); }
+
+  .sidebar-group-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 14px 12px 6px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .sidebar-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--border-active);
+    flex-shrink: 0;
+    transition: background 0.12s;
+  }
+
+  .sidebar-indent {
+    padding-left: 26px;
+  }
+
+  .sidebar-chevron {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    margin-left: var(--sidebar-width);
+    margin-right: var(--toc-width);
+    flex: 1;
+    padding: 48px 60px;
+    max-width: 900px;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    width: var(--toc-width);
+    position: fixed;
+    top: 56px;
+    right: 0;
+    bottom: 0;
+    padding: 32px 20px;
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+  }
+
+  .toc-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .toc-link {
+    display: block;
+    padding: 4px 0;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: color 0.12s;
+    border-left: 2px solid transparent;
+    padding-left: 10px;
+  }
+  .toc-link:hover { color: var(--text-secondary); }
+  .toc-link.active { color: var(--accent); border-left-color: var(--accent); }
+
+  /* ── HERO BANNER ── */
+  .hero {
+    background: linear-gradient(135deg, #0d1520 0%, #0a1628 50%, #111827 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px 48px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 240px; height: 240px;
+    background: radial-gradient(circle, rgba(0,168,232,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 {
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+  }
+
+  .hero p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    max-width: 520px;
+    line-height: 1.65;
+  }
+
+  .hero-grid {
+    position: absolute;
+    top: 0; right: 0;
+    width: 280px; height: 100%;
+    opacity: 0.06;
+    background-image: 
+      linear-gradient(var(--accent) 1px, transparent 1px),
+      linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  /* ── QUICK LINKS ── */
+  .quick-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  .quick-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .quick-card:hover {
+    border-color: var(--border-active);
+    background: var(--bg-tertiary);
+    transform: translateY(-1px);
+  }
+
+  .quick-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .quick-icon.blue { background: rgba(0,168,232,0.12); }
+  .quick-icon.green { background: rgba(34,197,94,0.12); }
+  .quick-icon.amber { background: rgba(245,158,11,0.12); }
+  .quick-icon.purple { background: rgba(167,139,250,0.12); }
+
+  .quick-card h3 {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+  .quick-card p { font-size: 12px; color: var(--text-muted); }
+
+  /* ── SECTION TITLES ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    margin-top: 40px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    margin-top: 28px;
+  }
+
+  p {
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ── CONTENT CARDS ── */
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .content-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .content-card:hover { border-color: var(--border-active); }
+
+  .content-card h4 {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .content-card p {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .tag-blue { background: rgba(0,168,232,0.12); color: var(--accent); }
+  .tag-green { background: rgba(34,197,94,0.1); color: var(--green); }
+  .tag-amber { background: rgba(245,158,11,0.1); color: var(--amber); }
+  .tag-purple { background: rgba(167,139,250,0.1); color: var(--purple); }
+
+  /* ── STATUS TABLE ── */
+  .status-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 32px;
+    font-size: 13px;
+  }
+
+  .status-table th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .status-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    vertical-align: middle;
+  }
+
+  .status-table tr:last-child td { border-bottom: none; }
+  .status-table tr:hover td { background: var(--bg-tertiary); }
+
+  .status-dot {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+  }
+  .status-dot::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .status-active::before { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .status-pilot::before { background: var(--amber); }
+  .status-planned::before { background: var(--text-muted); }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0 24px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: #b8c0d4;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .code-block .code-label {
+    position: absolute;
+    top: 10px; right: 14px;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .code-key { color: #7dd3fc; }
+  .code-val { color: #86efac; }
+  .code-comment { color: var(--text-muted); }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-dim);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+  }
+  .callout strong { color: var(--accent); font-weight: 500; }
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--text-secondary); }
+  .breadcrumb .sep { color: var(--border-active); }
+  .breadcrumb .current { color: var(--text-secondary); }
+
+  /* ── PROGRAM CARDS ── */
+  .program-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .program-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .program-card:hover { border-color: var(--border-active); }
+
+  .program-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .program-card h4 {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .program-card p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .program-flag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 60px;
+  }
+
+  /* ── SCROLL FX ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .main > * { animation: fadeIn 0.3s ease both; }
+  .main > *:nth-child(1) { animation-delay: 0.05s; }
+  .main > *:nth-child(2) { animation-delay: 0.1s; }
+  .main > *:nth-child(3) { animation-delay: 0.15s; }
+  .main > *:nth-child(4) { animation-delay: 0.2s; }
+  .main > *:nth-child(5) { animation-delay: 0.25s; }
+  .main > *:nth-child(6) { animation-delay: 0.3s; }
+
+  /* ── DIVIDER ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* ── PRODUCT PILLS ── */
+  .product-pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+  .product-pill.efm     { background: rgba(34,197,94,0.12);  color: #22c55e; }
+  .product-pill.research{ background: rgba(0,168,232,0.12);  color: #00a8e8; }
+  .product-pill.prt     { background: rgba(245,158,11,0.12); color: #f59e0b; }
+  .product-pill.ca      { background: rgba(167,139,250,0.12);color: #a78bfa; }
+
+  .sidebar-indent2 { padding-left: 36px; }
+
+  .sidebar-children {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.25s ease;
+  }
+  .sidebar-children.open { max-height: 400px; }
+
+  .sidebar-product {
+    font-weight: 500;
+  }
+  .sidebar-product .product-chevron {
+    transition: transform 0.2s ease;
+    font-size: 9px;
+    margin-left: auto;
+  }
+  .sidebar-product.open .product-chevron { transform: rotate(0deg); }
+  .sidebar-product:not(.open) .product-chevron { transform: rotate(-90deg); }
+
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <a class="nav-logo" href="#">
+    <div class="logo-mark">BIS</div>
+    Business Integration Services
+  </a>
+  <div class="nav-links">
+    <a class="nav-link active" href="#">Overview</a>
+    <a class="nav-link" href="#">Products</a>
+    <a class="nav-link" href="#">CMS Guides</a>
+    <a class="nav-link" href="#">Programs</a>
+    <a class="nav-link" href="#">Policy</a>
+    <a class="nav-link" href="#">Changelog</a>
+  </div>
+  <div class="nav-right">
+    <div class="search-box">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span>Search BIS docs...</span>
+      <span class="search-kbd">⌘K</span>
+    </div>
+    <span class="nav-badge">v2.4.0</span>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-item active">
+        <div class="sidebar-dot"></div>
+        Overview
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-dot"></div>
+        Getting Started
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-dot"></div>
+        BIS Engagement Guide
+      </div>
+    </div>
+
+    <div class="sidebar-group-label">Products</div>
+
+    <!-- EFM -->
+    <div class="sidebar-section">
+      <div class="sidebar-item sidebar-product" data-product="efm">
+        <span class="product-pill efm">EFM</span>
+        Electronic Filing Manager
+        <span class="sidebar-chevron product-chevron">▾</span>
+      </div>
+      <div class="sidebar-children" id="children-efm">
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          Overview
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          Certificate Process
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          EFSP Onboarding
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          Error Codes
+        </div>
+      </div>
+    </div>
+
+    <!-- re:Search -->
+    <div class="sidebar-section">
+      <div class="sidebar-item sidebar-product" data-product="research">
+        <span class="product-pill research">RES</span>
+        re:Search
+        <span class="sidebar-chevron product-chevron">▾</span>
+      </div>
+      <div class="sidebar-children" id="children-research">
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          Overview
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          NotifyCaseEvent
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          GetCase
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          GetDocument
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          ECF vs Batch Mode
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          Security Overrides
+        </div>
+      </div>
+    </div>
+
+    <!-- Press Review Tool -->
+    <div class="sidebar-section">
+      <div class="sidebar-item sidebar-product" data-product="prt">
+        <span class="product-pill prt">PRT</span>
+        Press Review Tool
+        <span class="sidebar-chevron product-chevron">▾</span>
+      </div>
+      <div class="sidebar-children" id="children-prt">
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          Overview
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          EFSP Token Setup
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          SoapUI Testing Guide
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          Error Code Reference
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          SQL Queries
+        </div>
+      </div>
+    </div>
+
+    <!-- Court Analytics -->
+    <div class="sidebar-section">
+      <div class="sidebar-item sidebar-product" data-product="ca">
+        <span class="product-pill ca">CA</span>
+        Court Analytics
+        <span class="sidebar-chevron product-chevron">▾</span>
+      </div>
+      <div class="sidebar-children" id="children-ca">
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          Overview
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          AEP Validation
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          Deduplication Logic
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          Data Flow Diagram
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          CATX Partner Guide
+        </div>
+        <div class="sidebar-item sidebar-indent2">
+          <div class="sidebar-dot"></div>
+          Release Management
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-group-label">CMS Integration</div>
+    <div class="sidebar-section">
+      <div class="sidebar-item sidebar-indent">
+        <div class="sidebar-dot"></div>
+        Integration Overview
+      </div>
+      <div class="sidebar-item sidebar-indent">
+        <div class="sidebar-dot"></div>
+        EFM Certificate Process
+      </div>
+      <div class="sidebar-item sidebar-indent">
+        <div class="sidebar-dot"></div>
+        SCR 8 Security API
+      </div>
+      <div class="sidebar-item sidebar-indent">
+        <div class="sidebar-dot"></div>
+        CMSID Requirements
+      </div>
+    </div>
+
+    <div class="sidebar-group-label">Programs</div>
+    <div class="sidebar-section">
+      <div class="sidebar-item sidebar-indent">
+        <div class="sidebar-dot"></div>
+        Court Analytics TX (CATX)
+      </div>
+      <div class="sidebar-item sidebar-indent">
+        <div class="sidebar-dot"></div>
+        Illinois (AOIC)
+      </div>
+      <div class="sidebar-item sidebar-indent">
+        <div class="sidebar-dot"></div>
+        Press Review Tool
+      </div>
+    </div>
+
+    <div class="sidebar-group-label">Policy</div>
+    <div class="sidebar-section">
+      <div class="sidebar-item sidebar-indent">
+        <div class="sidebar-dot"></div>
+        CMS Integrator Classification
+      </div>
+      <div class="sidebar-item sidebar-indent">
+        <div class="sidebar-dot"></div>
+        Internal Policy
+      </div>
+      <div class="sidebar-item sidebar-indent">
+        <div class="sidebar-dot"></div>
+        Client-Facing Guidelines
+      </div>
+    </div>
+
+    <div class="sidebar-group-label">Resources</div>
+    <div class="sidebar-section">
+      <div class="sidebar-item">
+        <div class="sidebar-dot"></div>
+        Changelog
+        <span class="sidebar-chevron">↗</span>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-dot"></div>
+        BIS Confluence
+        <span class="sidebar-chevron">↗</span>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-dot"></div>
+        Submit a Request
+        <span class="sidebar-chevron">↗</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <div class="breadcrumb">
+      <a href="#">Developer</a>
+      <span class="sep">/</span>
+      <span class="current">BIS</span>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-grid"></div>
+      <div class="hero-eyebrow">Tyler Technologies · Courts & Justice</div>
+      <h1>Business Integration Services</h1>
+      <p>Integration governance, API documentation, and program resources for CMS vendors, state courts, and internal teams.</p>
+    </div>
+
+    <div class="quick-links">
+      <a class="quick-card" href="#">
+        <div class="quick-icon green">📂</div>
+        <div>
+          <h3>EFM</h3>
+          <p>Certificates, EFSP onboarding, error codes</p>
+        </div>
+      </a>
+      <a class="quick-card" href="#">
+        <div class="quick-icon blue">🔍</div>
+        <div>
+          <h3>re:Search</h3>
+          <p>GetCase, GetDocument, ECF vs Batch</p>
+        </div>
+      </a>
+      <a class="quick-card" href="#">
+        <div class="quick-icon amber">📰</div>
+        <div>
+          <h3>Press Review Tool</h3>
+          <p>EFSP tokens, SoapUI, SQL queries</p>
+        </div>
+      </a>
+      <a class="quick-card" href="#">
+        <div class="quick-icon purple">📊</div>
+        <div>
+          <h3>Court Analytics</h3>
+          <p>AEP validation, deduplication, CATX</p>
+        </div>
+      </a>
+      <a class="quick-card" href="#">
+        <div class="quick-icon blue">🗺️</div>
+        <div>
+          <h3>Programs</h3>
+          <p>CATX, Illinois AOIC, market overviews</p>
+        </div>
+      </a>
+      <a class="quick-card" href="#">
+        <div class="quick-icon green">✉️</div>
+        <div>
+          <h3>Submit Request</h3>
+          <p>BIS.TPM@tylertech.com intake</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- WHAT IS BIS -->
+    <div class="section-label">What is BIS?</div>
+    <p>The Business Integration Services team owns integration governance, vendor relationship management, and release coordination across Tyler Technologies' Courts & Justice division. BIS serves as the operational bridge between CMS providers, state court administrations, and Tyler's core product teams.</p>
+
+    <div class="callout">
+      <strong>New to BIS?</strong> Start with the Engagement Guide to understand intake processes, SLAs, and how to route your request to the right team.
+    </div>
+
+    <div class="content-grid">
+      <div class="content-card">
+        <h4><span class="tag tag-green">EFM</span> Electronic Filing Manager</h4>
+        <p>Certificate process for CMS and EFSP vendors, EFSP onboarding, and error code reference for Electronic Filing Manager integrations.</p>
+      </div>
+      <div class="content-card">
+        <h4><span class="tag tag-blue">re:Search</span> Court Record API</h4>
+        <p>GetCase, GetDocument, and NotifyCaseEvent APIs. Covers ECF vs Batch Mode, filtered responses, CMSID format, and case-level security overrides.</p>
+      </div>
+      <div class="content-card">
+        <h4><span class="tag tag-amber">PRT</span> Press Review Tool</h4>
+        <p>Media access management for courts. EFSP token setup, SoapUI testing guide, SQL diagnostic queries, and error code reference.</p>
+      </div>
+      <div class="content-card">
+        <h4><span class="tag tag-purple">CA</span> Court Analytics</h4>
+        <p>AEP validation documentation, four-stage deduplication pipeline, CATX partner integration guide, and 90-day release management lifecycle.</p>
+      </div>
+    </div>
+
+    <!-- ACTIVE PROGRAMS -->
+    <h2>Active Programs</h2>
+    <p>Current BIS-led programs across state markets and Tyler product lines.</p>
+
+    <div class="program-cards">
+      <div class="program-card">
+        <div class="program-card-header">
+          <div>
+            <h4>Court Analytics TX</h4>
+            <p>CATX vendor integration</p>
+          </div>
+          <span class="program-flag tag tag-green">Active</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin:0">Voluntary CMS adoption · 4 partner vendors</p>
+      </div>
+      <div class="program-card">
+        <div class="program-card-header">
+          <div>
+            <h4>Illinois AOIC</h4>
+            <p>2026 roadmap & SCR 8</p>
+          </div>
+          <span class="program-flag tag tag-amber">In Progress</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin:0">Security API compliance · KT in progress</p>
+      </div>
+      <div class="program-card">
+        <div class="program-card-header">
+          <div>
+            <h4>Press Review Tool</h4>
+            <p>Media access management</p>
+          </div>
+          <span class="program-flag tag tag-blue">Stable</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin:0">TX OCA · Jefferson County · MN</p>
+      </div>
+    </div>
+
+    <!-- CMS PARTNER STATUS -->
+    <h2>CMS Partner Integration Status</h2>
+    <p>Current integration health across active CMS providers. Updated per release cycle.</p>
+
+    <table class="status-table">
+      <thead>
+        <tr>
+          <th>CMS Provider</th>
+          <th>re:Search</th>
+          <th>Court Analytics</th>
+          <th>EFM</th>
+          <th>Tier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--text-primary); font-weight:500">iDocket</td>
+          <td><span class="status-dot status-active">Active</span></td>
+          <td><span class="status-dot status-pilot">Pilot</span></td>
+          <td><span class="status-dot status-active">Active</span></td>
+          <td><span class="tag tag-blue">A</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--text-primary); font-weight:500">eDoc</td>
+          <td><span class="status-dot status-active">Active</span></td>
+          <td><span class="status-dot status-planned">Planned</span></td>
+          <td><span class="status-dot status-active">Active</span></td>
+          <td><span class="tag tag-blue">A</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--text-primary); font-weight:500">LGS</td>
+          <td><span class="status-dot status-active">Active</span></td>
+          <td><span class="status-dot status-planned">Planned</span></td>
+          <td><span class="status-dot status-pilot">Pilot</span></td>
+          <td><span class="tag tag-amber">B</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--text-primary); font-weight:500">i3Verticals</td>
+          <td><span class="status-dot status-pilot">Pilot</span></td>
+          <td><span class="status-dot status-planned">Planned</span></td>
+          <td><span class="status-dot status-planned">Planned</span></td>
+          <td><span class="tag tag-amber">B</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- CONTACT -->
+    <h2>Contact & Intake</h2>
+    <p>All BIS requests, integration inquiries, and vendor support questions should route through the BIS intake point. The TPM team triages within one business day.</p>
+
+    <div class="code-block">
+      <span class="code-label">Contact</span>
+      <span class="code-key">email</span>    <span class="code-val">BIS.TPM@tylertech.com</span><br>
+      <span class="code-key">tpm_lead</span> <span class="code-val">Bryce Beltran</span>  <span class="code-comment">// day-to-day execution</span><br>
+      <span class="code-key">sponsor</span>  <span class="code-val">Patrick Wallace</span> <span class="code-comment">// program sponsor</span><br>
+      <span class="code-key">manager</span>  <span class="code-val">Chris Burns</span>     <span class="code-comment">// BIS manager</span><br>
+      <span class="code-key">division</span> <span class="code-val">Courts &amp; Justice · Tyler Technologies</span>
+    </div>
+
+    <hr>
+
+    <div class="footer">
+      <span>© 2026 Tyler Technologies · Business Integration Services</span>
+      <span>Courts & Justice Division · Internal & Partner Use</span>
+    </div>
+
+  </main>
+
+  <!-- TOC -->
+  <aside class="toc">
+    <div class="toc-title">On this page</div>
+    <a class="toc-link active" href="#">What is BIS?</a>
+    <a class="toc-link" href="#">Quick Links</a>
+    <a class="toc-link" href="#">Active Programs</a>
+    <a class="toc-link" href="#">CMS Partner Status</a>
+    <a class="toc-link" href="#">Contact & Intake</a>
+  </aside>
+
+</div>
+
+<script>
+  // Sidebar active state
+  document.querySelectorAll('.sidebar-item:not(.sidebar-product)').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+
+  // Product accordion toggles
+  document.querySelectorAll('.sidebar-product').forEach(item => {
+    const productId = item.dataset.product;
+    const children = document.getElementById('children-' + productId);
+
+    // Open first one by default
+    if (productId === 'research') {
+      item.classList.add('open');
+      children.classList.add('open');
+    }
+
+    item.addEventListener('click', () => {
+      const isOpen = children.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.sidebar-children').forEach(c => c.classList.remove('open'));
+      document.querySelectorAll('.sidebar-product').forEach(p => p.classList.remove('open'));
+      // Toggle clicked
+      if (!isOpen) {
+        children.classList.add('open');
+        item.classList.add('open');
+      }
+    });
+  });
+
+  // Nav active state
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+
+  // TOC active state
+  document.querySelectorAll('.toc-link').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
